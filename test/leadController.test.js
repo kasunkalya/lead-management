@@ -7,12 +7,12 @@ let token;
 before(async () => {
   const response = await request(app)
     .post('/users/register')
-    .send({ name: 'testuser',email:'adminc@gmail.com', password: 'testpassword', role: 'SalesAgent' });
+    .send({ name: 'testuser',email:'admin@gmail.com', password: 'testpassword', role: 'SalesAgent' });
     expect(response.status).to.equal(201);
 
    const loginResponse = await request(app)
     .post('/users/login')
-    .send({ email:'adminc@gmail.com', password: 'testpassword' });
+    .send({ email:'admin@gmail.com', password: 'testpassword' });
     expect(loginResponse.status).to.equal(200);
 
   expect(loginResponse.body.token).to.be.a('string');
