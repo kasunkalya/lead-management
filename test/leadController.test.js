@@ -1,3 +1,20 @@
+/**
+ * Integration tests for the Leads endpoints.
+ *
+ * This file tests the following endpoints:
+ * - POST /leads: Create a new lead.
+ * - PUT /leads/assign/:id: Assign a lead to an agent.
+ * - PUT /leads/progress/:id: Update the status of a lead.
+ * - DELETE /leads/cancel/:id: Cancel a lead.
+ * - GET /leads: Retrieve leads with various filter options.
+ *
+ * Setup:
+ * - A test admin user is registered and logged in before running the tests.
+ *   Note: For testing non-admin behavior (e.g. forbidden), you may want
+ *   to create a separate non-admin user. Currently, the tests reuse the admin token.
+ */
+
+
 const request = require('supertest');
 const app = require('../app');
 const { expect } = require('chai');
@@ -5,14 +22,15 @@ const { expect } = require('chai');
 let token;
 
 before(async () => {
+  // Register an admin user
   const response = await request(app)
     .post('/users/register')
-    .send({ name: 'testuser',email:'admin21s@gmail.com', password: 'testpassword', role: 'SalesAgent' });
+    .send({ name: 'testuser',email:'adminnew@gmail.com', password: 'testpassword', role: 'Admin' });
     expect(response.status).to.equal(201);
-
+  // Login the admin user and get a token
    const loginResponse = await request(app)
     .post('/users/login')
-    .send({ email:'admin21s@gmail.com', password: 'testpassword' });
+    .send({ email:'adminnew@gmail.com', password: 'testpassword' });
     expect(loginResponse.status).to.equal(200);
 
   expect(loginResponse.body.token).to.be.a('string');
@@ -35,7 +53,8 @@ describe('POST /leads', () => {
       .set('Authorization', `Bearer ${token}`)
       .send(newLead)
       .expect(201);
-    
+
+    // Validate that the created lead matches the sent data
     expect(res.body.name).to.equal(newLead.name);
     expect(res.body.email).to.equal(newLead.email);
     expect(res.body.phone).to.equal(newLead.phone);
@@ -47,12 +66,15 @@ describe('POST /leads', () => {
 
 describe('PUT /leads/assign/:id', () => {
   it('should return forbidden for non-admin user', async () => {
+    // Create a lead with 'Unssigned' status
     const createRes = await request(app)
       .post('/leads')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Test Lead', email: 'testUser3@example.com', phone: '111111', source: 'Website', status: 'Unassigned' })
       .expect(201);
     const leadId = createRes.body.id;  
+    // Attempt to assign the lead using the admin token, expecting a 403 response.
+    // Note: For an accurate non-admin test, register/login a non-admin user.
     const res = await request(app)
       .put(`/leads/assign/${leadId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -63,6 +85,7 @@ describe('PUT /leads/assign/:id', () => {
   });
 
   it('should assign lead for admin user', async () => {
+    // Create a new lead with 'Unassigned' status
     const createRes = await request(app)
       .post('/leads')
       .set('Authorization', `Bearer ${token}`)
@@ -70,6 +93,7 @@ describe('PUT /leads/assign/:id', () => {
       .expect(201);
     const leadId = createRes.body.id;
 
+    // Assign the lead using the admin token    
     const res = await request(app)
       .put(`/leads/assign/${leadId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -85,6 +109,7 @@ describe('PUT /leads/assign/:id', () => {
 
 describe('PUT /leads/progress/:id', () => {
   it('should update lead status', async () => {    
+    // Create a new lead for updating its progress
     const createRes = await request(app)
       .post('/leads')
       .set('Authorization', `Bearer ${token}`)
@@ -92,6 +117,7 @@ describe('PUT /leads/progress/:id', () => {
       .expect(201);
     const leadId = createRes.body.id;
  
+    // Update the status of the lead
     const res = await request(app)
       .put(`/leads/progress/${leadId}`)     
       .send({ status: 'Assigned' })
@@ -103,6 +129,7 @@ describe('PUT /leads/progress/:id', () => {
 
 describe('DELETE /leads/cancel/:id', () => {
   it('should return 400 if lead status is not reservation', async () => {   
+    // Create a lead with a status other than 'Reserved'
     const createRes = await request(app)
       .post('/leads')
       .set('Authorization', `Bearer ${token}`)
@@ -110,6 +137,7 @@ describe('DELETE /leads/cancel/:id', () => {
       .expect(201);
     const leadId = createRes.body.id;
 
+   // Attempt to cancel the lead when cancellation is allowed only in reservation stage
     const res = await request(app)
       .delete(`/leads/cancel/${leadId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -119,7 +147,8 @@ describe('DELETE /leads/cancel/:id', () => {
     expect(res.body.message).to.equal('Cancellation allowed only in reservation stage');
   });
 
-  it('should cancel lead if status is reservation', async () => {    
+  it('should cancel lead if status is reservation', async () => {   
+    // Create a lead with status 'Reserved' 
     const createRes = await request(app)
       .post('/leads')
       .set('Authorization', `Bearer ${token}`)
@@ -127,6 +156,7 @@ describe('DELETE /leads/cancel/:id', () => {
       .expect(201);
     const leadId = createRes.body.id;
 
+    // Cancel the lead with a valid reason
     const res = await request(app)
       .delete(`/leads/cancel/${leadId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -150,8 +180,6 @@ describe('GET /leads', () => {
       expect(lead.status).to.equal('Assigned');
     });
   });
-
-
   
   it('should filter leads by agentId', async () => {
     const res = await request(app)
