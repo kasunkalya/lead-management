@@ -6,7 +6,7 @@ const User = sequelize.define('User', {
     name: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
-    role: { type: DataTypes.ENUM('admin', 'sales_agent'), allowNull: false }
+    role: { type: DataTypes.ENUM('Admin', 'SalesAgent'), allowNull: false }
 });
 
 module.exports = User;
