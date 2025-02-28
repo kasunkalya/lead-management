@@ -24,6 +24,7 @@ This project is a Lead Management API built using Node.js, Express, Sequelize (M
 1. **Clone the repository**
 
    git clone https://github.com/kasunkalya/lead-management.git
+   
    cd lead-management
 
 2. **Install dependencies**
