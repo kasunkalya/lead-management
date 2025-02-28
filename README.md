@@ -11,8 +11,7 @@ This project is a Lead Management API built using Node.js, Express, Sequelize (M
 - [Testing](#testing)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
-- [Contribution](#contribution)
-- [License](#license)
+
 
 ## Prerequisites
 
@@ -92,4 +91,20 @@ This project is a Lead Management API built using Node.js, Express, Sequelize (M
 
 ## API Documentation
 
-    Import the provided Postman collection (exported as a JSON file) to view detailed API documentation and example requests for all endpoints.
+   1. **Flowcharts**
+
+    For a visual overview of the system's workflow and API process, please refer to the attached documents:
+    ![ER diagram](docs/er_diagram.png)
+    ![Use Case diagram](docs/use_case_diagram.png)
+
+    Note: Place the actual flowchart image files in a docs/ directory in your repository.
+
+    2. **Postman Collection**
+
+    A Postman collection is provided to help you explore and test the API endpoints. To import the collection:
+
+    Open Postman.
+    Click on Import and select the postman_collection.json file located in the docs/ directory.
+    Once imported, you'll see a folder with all the API endpoints documented, including example requests and responses.
+
+Note: Ensure the postman_collection.json file is included in your repository under the docs/ directory or a similar location.
