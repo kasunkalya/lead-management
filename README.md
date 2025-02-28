@@ -101,10 +101,10 @@ This project is a Lead Management API built using Node.js, Express, Sequelize (M
 
     2. **Postman Collection**
 
-    A Postman collection is provided to help you explore and test the API endpoints. To import the collection:
+     [Download the Postman Collection](docs/postman_collection.json)
 
-    Open Postman.
-    Click on Import and select the postman_collection.json file located in the docs/ directory.
-    Once imported, you'll see a folder with all the API endpoints documented, including example requests and responses.
-
-Note: Ensure the postman_collection.json file is included in your repository under the docs/ directory or a similar location.
+    **Import into Postman:**  
+    1. Open Postman.
+    2. Click **"Import"** in the top left corner.
+    3. Drag and drop the `postman_collection.json` file into the window, or select it manually.
+    4. The collection will appear in your list of collections with detailed API endpoints, request examples, and responses.
