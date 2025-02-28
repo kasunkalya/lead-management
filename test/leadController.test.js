@@ -7,12 +7,12 @@ let token;
 before(async () => {
   const response = await request(app)
     .post('/users/register')
-    .send({ name: 'testuser',email:'admin@gmail.com', password: 'testpassword', role: 'SalesAgent' });
+    .send({ name: 'testuser',email:'admin21s@gmail.com', password: 'testpassword', role: 'SalesAgent' });
     expect(response.status).to.equal(201);
 
    const loginResponse = await request(app)
     .post('/users/login')
-    .send({ email:'admin@gmail.com', password: 'testpassword' });
+    .send({ email:'admin21s@gmail.com', password: 'testpassword' });
     expect(loginResponse.status).to.equal(200);
 
   expect(loginResponse.body.token).to.be.a('string');
@@ -24,7 +24,7 @@ describe('POST /leads', () => {
   it('should create a new lead', async () => {
     const newLead = { 
       name: 'John Doe', 
-      email: 'afJohsnsoe@mail.com', 
+      email: 'afJohsnsoe2@mail.com', 
       phone: '1234567890',
       source: 'Website' ,
       status:'Assigned'
@@ -88,13 +88,13 @@ describe('PUT /leads/progress/:id', () => {
     const createRes = await request(app)
       .post('/leads')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Progress Lead', email: 'progress@example.com', phone: '333333', source: 'Website', status: 'New' })
+      .send({ name: 'Progress Lead', email: 'progress1s@example.com', phone: '333333', source: 'Website', status: 'Unassigned' })
       .expect(201);
     const leadId = createRes.body.id;
  
     const res = await request(app)
       .put(`/leads/progress/${leadId}`)     
-      .send({ status: 'Reserved' })
+      .send({ status: 'Assigned' })
       .expect(200);
 
     expect(res.body.message).to.equal('Lead updated');
