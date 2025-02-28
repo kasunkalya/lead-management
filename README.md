@@ -101,7 +101,8 @@ This project is a Lead Management API built using Node.js, Express, Sequelize (M
 
     2. **Postman Collection**
 
-     [Download the Postman Collection](docs/postman_collection.json)
+    [Download the Postman Collection](docs/postman_collection.json)
+    [API Documentation](https://documenter.getpostman.com/view/21816244/2sAYdhJpjh)
 
     **Import into Postman:**  
     1. Open Postman.
